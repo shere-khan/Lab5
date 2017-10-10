@@ -19,39 +19,38 @@ int main() {
     // Open file.
     printf("What is the name of the file?\n");
     scanf("%s", filename);
-    ifp = fopen("account1.txt", "r");
     /***Open Input File***/
+    ifp = fopen(filename, "r");
 
     // Initialize accounts.
     /***Set all values in accounts to zero***/
+    for (int i = 0; i < MAX_CUSTOMERS; i++)
+        accounts[i] = 0;
 
     // Read the number of commands from the file
     fscanf(ifp, "%d", &numCommands);
 
     // Process each command.
-    for (i=0; i<numCommands; i++) {
+    for (i = 0; i < numCommands; i++) {
 
         // Get type of this command.
-        /***Read command value from file***/
+        fscanf(ifp, "%d", &command);
 
         // Add money.
         if (command == 1) {
             /***Read id and amount from file***/
+            fscanf(ifp, "%d %d", &id, &amount);
+            // fscanf(ifp, "%d", &amount);
             accounts[id] += amount;
-        }
-
-            // Subtract money.
-        else if (command == 2) {
+        } else if (command == 2) { // subtract money
             fscanf(ifp, "%d %d", &id, &amount);
             /***Deduct amount from the account with identification number id***/
-        }
-
-            // Print delinquents.
-        else {
+            accounts[id] -= amount;
+        } else {// Print delinquents.
             // Go through each account, flagging negative balances.
             ok = 1;
-            for (j=0; j<MAX_CUSTOMERS; j++) {
-                if (/***check if jth account is less than zero***/) {
+            for (j = 0; j < MAX_CUSTOMERS; j++) {
+                if (accounts[j] < 0) { /***check if jth account is less than zero***/
                     printf("Customer %d, you owe $%d. Please pay immediately!\n", j, -accounts[j]);
                     ok = 0;
                 }
@@ -65,6 +64,7 @@ int main() {
     }
 
     /***close file pointer***/
+    fclose(ifp);
 
     return 0;
 }
